@@ -17,7 +17,7 @@ fs.readdir(myDirPath, {withFileTypes: true}, (err,data)=>{
       let fileName = data[i].name.split('.')[0];
       let fileExt = path.extname(data[i].name).split('.')[1];
      
-      getStat(path.join(myDirPath,data[i].name)).then(stats=>console.log(`${fileName} - ${fileExt} - ${stats.size/1000}kb`));
+      getStat(path.join(myDirPath,data[i].name)).then(stats=>console.log(`${fileName} - ${fileExt} - ${stats.size/1024}kb`));
       
     }}
   return 1;
