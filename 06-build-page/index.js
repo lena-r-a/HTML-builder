@@ -59,7 +59,7 @@ fs.promises.mkdir(path.join(__dirname,'project-dist'), { recursive: true }).then
           text = text.replace(`{{${fileName}}}`,data);
           // console.log(text);
           fs.writeFile(myHtmlPath, text, function (err) {
-            if (err) return console.log(err);
+            if (err) console.log(err);
           });
         });
         
