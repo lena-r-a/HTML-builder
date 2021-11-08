@@ -19,7 +19,7 @@ fs.promises.mkdir(copyDirPath, { recursive: true }).then(
         if (data[i].isFile()){
           let src = path.join(myDirPath,data[i].name);
           let dest = path.join(copyDirPath,data[i].name);
-          fs.copyFile(src,dest, err=>{console.log(err);});
+          fs.copyFile(src,dest, err=>{if (err) console.log(err);});
         }
       }});
   }).catch(err=>{console.log(err);});

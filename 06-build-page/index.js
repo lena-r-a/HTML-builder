@@ -39,7 +39,8 @@ function copyDirectory(dirPath,copyDirPath) {
           let dest = path.join(copyDirPath,data[i].name);
           let newDirPath= path.join(dirPath,data[i].name);
           if (data[i].isFile()){
-            fs.copyFile(src,dest, err=>{console.log(err);});
+            fs.copyFile(src,dest, err=>{
+              if (err) console.log(err);});
           } else {
             copyDirectory(newDirPath,dest);
           }
