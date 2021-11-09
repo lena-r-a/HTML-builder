@@ -8,7 +8,14 @@ let rl = readline.createInterface({
 });
 
 console.log('------Input your text, please:------');
+function fileHandler(){
 
+  fs.open(path.join(__dirname,'text.txt'), 'w', (err) => {
+    if(err) throw err;
+  });
+  
+}
+fileHandler();
 rl.on('line', function(line){
   fs.appendFile(path.join(__dirname,'text.txt'), `${line}\n`, (err) => {
     if (line=='exit') {
