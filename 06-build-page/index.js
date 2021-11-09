@@ -54,14 +54,16 @@ fs.promises.mkdir(path.join(__dirname,'project-dist'), { recursive: true }).then
   fs.readdir(path.join(__dirname,'components'),{withFileTypes: true},(err,files)=>{
     myReadStream.on('data', (text)=>{
       for (let i=0;i<files.length;i++) {
-        let fileName = files[i].name.split('.')[0];
-        fs.readFile(path.join(__dirname,'components',files[i].name),'utf-8', (error,data)=>{
-          text = text.replace(`{{${fileName}}}`,data);
-          // console.log(text);
-          fs.writeFile(myHtmlPath, text, function (err) {
-            if (err) console.log(err);
+        if(path.extname(files[i].name)=='.html'){
+          let fileName = files[i].name.split('.')[0];
+          fs.readFile(path.join(__dirname,'components',files[i].name),'utf-8', (error,data)=>{
+            text = text.replace(`{{${fileName}}}`,data);
+            fs.writeFile(myHtmlPath, text, function (err) {
+              if (err) console.log(err);
+            });
           });
-        });
+        }
+        
         
       }
      
