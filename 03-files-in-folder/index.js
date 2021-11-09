@@ -14,9 +14,9 @@ const getStat = (f)=> {
 fs.readdir(myDirPath, {withFileTypes: true}, (err,data)=>{
   for (let i=0;i<data.length;i++) { 
     if (data[i].isFile()) {
-      let fileName = data[i].name.split('.')[0];
+      // let fileName = data[i].name.split('.')[0];
       let fileExt = path.extname(data[i].name).split('.')[1];
-     
+      let fileName = path.basename(data[i].name,path.extname(data[i].name));
       getStat(path.join(myDirPath,data[i].name)).then(stats=>console.log(`${fileName} - ${fileExt} - ${stats.size/1024}kb`));
       
     }}
