@@ -9,48 +9,47 @@ const copyAssetsDirPath = path.join(__dirname,'project-dist','assets');
 const myCssFilePath = path.join(__dirname,'project-dist','style.css');
 const myDirPath = path.join(__dirname,'styles');
 
-// let objHtml = {
-//   header:'',
-//   articles:'',
-//   footer:''
-// };
+
 let myReadStream = fs.createReadStream(myFilePath, 'utf-8');
-// let myReadStreamHeader = fs.createReadStream(path.join(__dirname,'components','header.html'), 'utf-8');
-// let myReadStreamArticles = fs.createReadStream(path.join(__dirname,'components','articles.html'), 'utf-8');
-// let myReadStreamFooter = fs.createReadStream(path.join(__dirname,'components','footer.html'), 'utf-8');
+
 
 function copyDirectory(dirPath,copyDirPath) {
-  fs.promises.mkdir(copyDirPath, { recursive: true }).then(
-    ()=>{
-      fs.readdir(copyDirPath, {withFileTypes: true}, (error,files)=>{
-        for (let i=0;i<files.length;i++) {
-          if (files[i].isFile())
-          {fs.unlink(path.join(copyDirPath,files[i].name), (err)=>{
-            if (err) {console.log(err);}
-          });}
-        }
-      });
-    }
-  ).then(
-    ()=>{
-      fs.readdir(dirPath, {withFileTypes: true}, (err,data)=>{
-        for (let i=0;i<data.length;i++) { 
-          let src = path.join(dirPath,data[i].name);
-          let dest = path.join(copyDirPath,data[i].name);
-          let newDirPath= path.join(dirPath,data[i].name);
-          if (data[i].isFile()){
-            fs.copyFile(src,dest, err=>{
-              if (err) console.log(err);});
-          } else {
-            copyDirectory(newDirPath,dest);
+  fs.promises.rm(copyDirPath,{ recursive: true, force: true }).then(()=>{
+    fs.mkdir(copyDirPath, { recursive: true },  (err)=>{
+      if (err) {console.log(err);}
+    });})
+    .then(
+      ()=>{
+      
+        fs.readdir(copyDirPath, {withFileTypes: true}, (error,files)=>{
+          for (let i=0;i<files.length;i++) {
+            if (files[i].isFile())
+            {fs.unlink(path.join(copyDirPath,files[i].name), (err)=>{
+              if (err) {console.log(err);}
+            });}
           }
-        }});
-    }).catch(err=>{console.log(err);});
+        });
+      }
+    ).then(
+      ()=>{
+        fs.readdir(dirPath, {withFileTypes: true}, (err,data)=>{
+          for (let i=0;i<data.length;i++) { 
+            let src = path.join(dirPath,data[i].name);
+            let dest = path.join(copyDirPath,data[i].name);
+            let newDirPath= path.join(dirPath,data[i].name);
+            if (data[i].isFile()){
+              fs.copyFile(src,dest, err=>{
+                if (err) console.log(err);});
+            } else {
+              copyDirectory(newDirPath,dest);
+            }
+          }});
+      }).catch(err=>{console.log(err);});
 }
 
 
 fs.promises.mkdir(path.join(__dirname,'project-dist'), { recursive: true }).then(()=>{
-
+  
   fs.readdir(path.join(__dirname,'components'),{withFileTypes: true},(err,files)=>{
     myReadStream.on('data', (text)=>{
       for (let i=0;i<files.length;i++) {
@@ -69,28 +68,8 @@ fs.promises.mkdir(path.join(__dirname,'project-dist'), { recursive: true }).then
      
     });
     
-  });
-
-  // myReadStreamHeader.on('data', (headertext)=>{
-  //   objHtml.header=headertext;
-  // });
-  // myReadStreamArticles.on ('data', (articlestext)=>{
-  //   objHtml.articles=articlestext;
-  // });
-  // myReadStreamFooter.on ('data', (footertext)=>{
-  //   objHtml.footer=footertext;
-  //   myReadStream.on('data', (text)=>{
-  //     text = text.replace('{{header}}', objHtml.header);
-  //     text = text.replace('{{articles}}', objHtml.articles);
-  //     text = text.replace('{{footer}}', objHtml.footer);
-  //     fs.writeFile(myHtmlPath, text, function (err) {
-  //       if (err) return console.log(err);
-  //     });
-  //   });
     
-  // });
-  
-  
+  });
   
 }).catch(err => console.log(err)) ;
 
